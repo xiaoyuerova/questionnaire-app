@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import RHome from '../views/respondents/Home.vue'
 import QLogin from '../views/questioners/Login.vue'
+import QRegister from '../views/questioners/Register.vue'
 
 Vue.use(VueRouter)
 
@@ -20,6 +21,11 @@ const routes: Array<RouteConfig> = [
     path:'/',
     name:'QuestionersLogin',
     component: QLogin
+  },
+  {
+    path:'/register',
+    name:'QuestionersRegister',
+    component: QRegister
   }
 ]
 

@@ -17,14 +17,12 @@
             >
               <v-text-field
                   v-model="name"
-                  v-if="radio === 0"
                   :rules="nameRules"
                   label="用户名"
                   required
               ></v-text-field>
 
               <v-text-field
-                  v-if="radio === 1"
                   v-model="email"
                   :rules="emailRules"
                   label="E-mail"
@@ -38,32 +36,19 @@
                   required
               ></v-text-field>
 
-              <v-radio-group v-model="radio">
-                <v-radio
-                    label="使用用户名登录"
-                    :value="0"
-                ></v-radio>
-                <v-radio
-                    label="使用邮箱登录"
-                    :value="1"
-                ></v-radio>
-              </v-radio-group>
+              <v-text-field
+                  v-model="verifyPassword"
+                  :rules="[verifyPasswordRules]"
+                  label="确认密码"
+                  required
+              ></v-text-field>
 
               <v-row
                   align="center"
-                  class="mt-4"
                   justify="space-around">
                 <v-btn
                     :disabled="!valid"
                     color="primary"
-                    class="ml-4"
-                    @click="login"
-                >
-                  登录
-                </v-btn>
-                <v-btn
-                    :disabled="!valid"
-                    class="mr-4"
                     @click="register"
                 >
                   注册
@@ -81,13 +66,12 @@
               cols="4"
           >
             <v-alert
-                v-show="alert"
-                type="error"
+                v-if="alert"
+                :type="alertType"
                 class="mt-8"
                 outlined
                 dense
-            >{{ alertMsg }}
-            </v-alert>
+            >{{alertMsg}}</v-alert>
           </v-col>
         </v-row>
       </v-container>
@@ -99,7 +83,7 @@
 import axios from "axios";
 
 export default {
-  name: "Login",
+  name: "Register",
   data: () => ({
     valid: true,
     name: '',
@@ -118,33 +102,41 @@ export default {
       v => (v && v.length <= 18) || '密码长度必须小于18个字符',
       v => (v && v.length >= 6) || '密码长度必须大于6个字符',
     ],
-    radio: 0,
+    verifyPassword: '',
     alert: false,
-    alertMsg: ''
+    alertType: 'success',
+    alertMsg:''
   }),
   methods: {
-    login() {
-      if (this.validate()) {
+    verifyPasswordRules(v){
+      if(!v){
+        return '请再输入一遍密码'
+      }
+      if (v && v !== this.password){
+        return '两次输入的密码不同'
+      }
+      return true
+    },
+    register() {
+      if(this.validate()) {
         let param = new URLSearchParams()
         param.append('name', this.name,)
         param.append('password', this.password)
-        axios.post('http://127.0.0.1:8010/questioners/login', param).then((res) => {
+        axios.post('http://127.0.0.1:8010/questioners/register', param).then((res) => {
           const data = res.data.data
-          if (data.code === '0') {
-
-          } else {
-            this.alertMsg = '登录失败！' + data.msg
-            this.alert = true
-            setTimeout(() => {
-              this.alert = false
-            }, 3000)
+          if (data.code === '0'){
+            this.alertMsg = '注册成功！'
+          }else {
+            this.alertType = 'error'
+            this.alertMsg = '注册失败！' + data.msg
           }
+          this.alert = true
+          setTimeout(() => {
+            this.alert = false
+          }, 3000)
           console.log(data)
         })
       }
-    },
-    register() {
-      this.$router.push('/register')
     },
     validate() {
       return this.$refs.form.validate()
