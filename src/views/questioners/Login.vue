@@ -8,7 +8,8 @@
             style="height: 400px;"
         >
           <v-col
-              cols="4"
+              cols="8"
+              md="4"
           >
             <v-form
                 ref="form"
@@ -78,7 +79,8 @@
             style="margin-top: -72px"
         >
           <v-col
-              cols="4"
+              cols="8"
+              md="4"
           >
             <v-alert
                 v-show="alert"
@@ -125,22 +127,42 @@ export default {
   methods: {
     login() {
       if (this.validate()) {
-        let param = new URLSearchParams()
-        param.append('name', this.name,)
-        param.append('password', this.password)
-        axios.post('http://127.0.0.1:8010/questioners/login', param).then((res) => {
-          const data = res.data.data
-          if (data.code === '0') {
+        if(this.radio === 0) {
+          let param = new URLSearchParams()
+          param.append('name', this.name,)
+          param.append('password', this.password)
+          axios.post('http://127.0.0.1:8010/questioners/login', param).then((res) => {
+            const data = res.data.data
+            if (data.code === '0') {
 
-          } else {
-            this.alertMsg = '登录失败！' + data.msg
-            this.alert = true
-            setTimeout(() => {
-              this.alert = false
-            }, 3000)
-          }
-          console.log(data)
-        })
+            } else {
+              this.alertMsg = '登录失败！' + data.msg
+              this.alert = true
+              setTimeout(() => {
+                this.alert = false
+              }, 3000)
+            }
+            console.log(data)
+          })
+        }
+        else {
+          let param = new URLSearchParams()
+          param.append('email', this.email,)
+          param.append('password', this.password)
+          axios.post('http://127.0.0.1:8010/questioners/elogin', param).then((res) => {
+            const data = res.data.data
+            if (data.code === '0') {
+
+            } else {
+              this.alertMsg = '登录失败！' + data.msg
+              this.alert = true
+              setTimeout(() => {
+                this.alert = false
+              }, 3000)
+            }
+            console.log(data)
+          })
+        }
       }
     },
     register() {

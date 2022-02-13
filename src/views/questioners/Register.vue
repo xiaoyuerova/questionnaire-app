@@ -8,7 +8,8 @@
             style="height: 400px;"
         >
           <v-col
-              cols="4"
+              cols="8"
+              md="4"
           >
             <v-form
                 ref="form"
@@ -63,7 +64,8 @@
             style="margin-top: -72px"
         >
           <v-col
-              cols="4"
+              cols="8"
+              md="4"
           >
             <v-alert
                 v-if="alert"
@@ -121,6 +123,7 @@ export default {
       if(this.validate()) {
         let param = new URLSearchParams()
         param.append('name', this.name,)
+        param.append('email', this.email,)
         param.append('password', this.password)
         axios.post('http://127.0.0.1:8010/questioners/register', param).then((res) => {
           const data = res.data.data
