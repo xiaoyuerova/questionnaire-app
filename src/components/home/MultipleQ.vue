@@ -1,48 +1,49 @@
 <template>
   <v-card
-  elevation="2"
+      elevation="2"
   >
     <v-subheader>
       {{ index + 1 }}.{{ question.question }}
-      <span style="color: #5472ff">{{questionType[typeKey]}}</span>
+      <span style="color: #5472ff">{{ questionType[typeKey] }}</span>
     </v-subheader>
     <v-row
         justify="center">
       <v-col
-          cols="11">
+          cols="11"
+          class="pl-5 pr-10"
+      >
         <v-row style="height: 20px"></v-row>
         <v-row>
           <v-col
               cols="12"
           >
-            <div
-                class="pl-5 pr-10"
-            >
-              <template v-for="(option,index) in question.options">
+            <template v-for="(option,index) in question.options">
+              <div>
+                <div style="width: 82%;position: absolute;" ref="checkbox">
+                  <v-checkbox
+                      v-model="answersLocal[index]"
+                      :label="option"
+                      color="blue"
+                      hide-details
+                      @click="submitAnswer"
+                      class="py-1"
+                  ></v-checkbox>
+                </div>
                 <v-progress-linear
                     v-if="question.reference"
                     v-model="percentage[index]"
                     background-color=rgba(0,0,255,0.05)
                     color="rgba(0,0,255,0.2)"
-                    height="24"
-                    class="ml-7"
+                    :height="progressHeight[index]"
+                    class="ml-7 mb-1"
                     rounded
                 >
-                  <div class="d-flex justify-end" style="width: 100%;">
-                    <span style="font-size: 16px;line-height: 100%">{{ referenceAnswer[index] }} 人</span>
+                  <div class="d-flex justify-end pr-2" style="width: 100%;">
+                    <span style="font-size: 16px;line-height: 100%">{{ percentage[index] }}%</span>
                   </div>
                 </v-progress-linear>
-                <v-checkbox
-                    v-model="answersLocal[index]"
-                    :label="option"
-                    color="blue"
-                    style="height: 32px;margin: 0;padding: 0"
-                    hide-details
-                    @click="submitAnswer"
-                    class="mt-n6"
-                ></v-checkbox>
-              </template>
-            </div>
+              </div>
+            </template>
           </v-col>
         </v-row>
         <v-row style="height: 20px"></v-row>
@@ -58,7 +59,8 @@ export default {
   data() {
     return {
       answersLocal: [],
-      questionType: ['（单选）', '（多选）']
+      questionType: ['（单选）', '（多选）'],
+      progressHeight: []
     }
   },
   methods: {
@@ -71,37 +73,56 @@ export default {
     },
     resetSavedAnswer() {
       this.answersLocal = this.answer
-    }
+    },
+    resetProgressHeight() {
+      const height = []
+      for (let i = 0; i < this.$refs.checkbox.length; i++) {
+        height[i] = this.$refs.checkbox[i].offsetHeight
+      }
+      this.progressHeight = height
+    },
   },
   computed: {
-    question(){
+    questionnaire() {
+      return this.$store.state.questionnaire
+    },
+    question() {
       return this.$store.state.questions[this.index]
     },
     answer() {
       return this.$store.state.answers[this.index]
     },
     percentage() {
-      let total = 0
+      let total = this.questionnaire.respondentsCount
       const length = this.referenceAnswer.length
-      for (let i = 0; i < length; i++) {
-        total += this.referenceAnswer[i]
+      if (total === 0) {
+        return new Array(length).fill(0)
       }
       const p = new Array(length)
       for (let i = 0; i < length; i++) {
-        p[i] = 100 * this.referenceAnswer[i] / total
+        if (this.referenceAnswer[i] <= 0) {
+          p[i] = 0
+        } else {
+          p[i] = Math.round(100 * this.referenceAnswer[i] / total)
+        }
       }
       return p
     },
     referenceAnswer() {
       return this.$store.state.referenceAnswer[this.index]
     },
-    typeKey(){
+    typeKey() {
       return this.question.type
     }
-  }
+  },
+  mounted() {
+    this.resetProgressHeight()
+  },
 }
 </script>
 
 <style scoped>
-
+.v-input--checkbox {
+  margin-top: 0;
+}
 </style>
