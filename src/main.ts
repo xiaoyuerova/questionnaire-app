@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify'
 // import cookie from "@/utils/cookie";
 
 Vue.config.productionTip = false
+Vue.prototype.$pb = process.env.BASE_URL
 // Vue.prototype.$cookies = cookie
 
 new Vue({

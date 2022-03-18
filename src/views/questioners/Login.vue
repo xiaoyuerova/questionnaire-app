@@ -63,7 +63,6 @@
                   登录
                 </v-btn>
                 <v-btn
-                    :disabled="!valid"
                     class="mr-4"
                     @click="register"
                 >
@@ -99,6 +98,10 @@
 
 <script>
 import axios from "axios";
+import apiUrl from "@/utils/api";
+// axios默认配置
+axios.defaults.timeout = 10000;   // 超时时间
+axios.defaults.baseURL = apiUrl;  // 默认地址
 
 export default {
   name: "Login",
@@ -120,7 +123,7 @@ export default {
       v => (v && v.length <= 18) || '密码长度必须小于18个字符',
       v => (v && v.length >= 6) || '密码长度必须大于6个字符',
     ],
-    radio: 0,
+    radio: 0,         // 0:用户名登录；1：邮箱登录
     alert: false,
     alertMsg: ''
   }),
@@ -128,13 +131,14 @@ export default {
     login() {
       if (this.validate()) {
         if(this.radio === 0) {
+          // 用户名登录
           let param = new URLSearchParams()
           param.append('name', this.name,)
           param.append('password', this.password)
-          axios.post('http://127.0.0.1:8010/questioners/login', param).then((res) => {
+          axios.post('/questioners/login', param).then((res) => {
             const data = res.data.data
             if (data.code === '0') {
-
+              this.goTo()
             } else {
               this.alertMsg = '登录失败！' + data.msg
               this.alert = true
@@ -146,13 +150,14 @@ export default {
           })
         }
         else {
+          // 邮箱登录
           let param = new URLSearchParams()
           param.append('email', this.email,)
           param.append('password', this.password)
-          axios.post('http://127.0.0.1:8010/questioners/elogin', param).then((res) => {
+          axios.post('/questioners/elogin', param).then((res) => {
             const data = res.data.data
             if (data.code === '0') {
-
+              this.goTo()
             } else {
               this.alertMsg = '登录失败！' + data.msg
               this.alert = true
@@ -160,10 +165,12 @@ export default {
                 this.alert = false
               }, 3000)
             }
-            console.log(data)
           })
         }
       }
+    },
+    goTo() {
+      this.$router.push('/questioners/index')
     },
     register() {
       this.$router.push('/register')

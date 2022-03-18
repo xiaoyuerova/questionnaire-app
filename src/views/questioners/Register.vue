@@ -83,6 +83,10 @@
 
 <script>
 import axios from "axios";
+import apiUrl from "@/utils/api";
+// axios默认配置
+axios.defaults.timeout = 10000;   // 超时时间
+axios.defaults.baseURL = apiUrl;  // 默认地址
 
 export default {
   name: "Register",
@@ -125,7 +129,7 @@ export default {
         param.append('name', this.name,)
         param.append('email', this.email,)
         param.append('password', this.password)
-        axios.post('http://127.0.0.1:8010/questioners/register', param).then((res) => {
+        axios.post('/questioners/register', param).then((res) => {
           const data = res.data.data
           if (data.code === '0'){
             this.alertMsg = '注册成功！'

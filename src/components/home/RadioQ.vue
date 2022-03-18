@@ -18,15 +18,17 @@
         >
           <template v-for="(option,index) in question.options">
             <div>
-              <div style="width: 98%;position: absolute;" ref="radio">
-                <v-radio
-                    :label=option
-                    color="blue"
-                    :value=index
-                    @click="submitAnswer"
-                    class="py-1"
-                >
-                </v-radio>
+              <div class="pr-4" style="position: absolute;">
+                <div ref="radio">
+                  <v-radio
+                      :label=option
+                      color="blue"
+                      :value=index
+                      @click="submitAnswer"
+                      class="py-1"
+                  >
+                  </v-radio>
+                </div>
               </div>
               <v-progress-linear
                   v-if="question.reference"

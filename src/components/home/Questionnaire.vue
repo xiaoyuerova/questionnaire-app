@@ -59,10 +59,13 @@
 </template>
 
 <script>
-import axios from "axios";
-import json_to_obj from "@/assets/common/common.ts"
 import RadioQ from "@/components/home/RadioQ";
 import MultipleQ from "@/components/home/MultipleQ";
+import axios from "axios";
+import apiUrl from "@/utils/api";
+// axios默认配置
+axios.defaults.timeout = 10000;   // 超时时间
+axios.defaults.baseURL = apiUrl;  // 默认地址
 
 export default {
   name: "Questionnaire",
@@ -73,16 +76,17 @@ export default {
   data: () => ({
     questionnaireId: '',
     respondentId: '',
-    alertText: ['提交成功！', '提交失败！', '答案未修改，无需提交'],
-    alertType: ['success', 'error', 'warning'],
+    alertText: ['提交成功！', '提交失败！请稍后再次尝试'],
+    alertType: ['success', 'error'],
     key:0,
     alertShow: false
   }),
   methods: {
+    // 获取问卷的所有数据
     getQuestionnaire() {
       this.questionnaireId = this.$route.params.qid
       this.respondentId = this.$route.params.rid
-      axios.get('http://127.0.0.1:8010/questionnaires/get', {
+      axios.get('/questionnaires/get', {
         params: {
           'respondentId': this.respondentId,
           'questionnaireId': this.questionnaireId
@@ -103,7 +107,8 @@ export default {
         }
       })
     },
-    submit() {
+    // 每隔十秒自动提交一次有所更改的答案
+    submitAuto() {
       setInterval(() => {
         const answers = this.collectAnswers()
         if (answers.length > 0) {
@@ -111,11 +116,12 @@ export default {
           params.append('respondentId', this.respondentId)
           params.append('questionnaireId', this.questionnaireId)
           params.append('answers', JSON.stringify(answers))
-          axios.post('http://127.0.0.1:8010/answers/submit', params).then((res) => {
+          axios.post('/answers/submit', params).then((res) => {
           })
         }
       }, 10000)
     },
+    // 点击提交按钮，表示完成问卷：提交更改过的答案；检查是否每一题都有回答，没有问题就认定为结束作答
     submitQuestionnaire() {
       const answers = this.collectAnswers()
       if (answers.length > 0) {
@@ -123,19 +129,25 @@ export default {
         params.append('respondentId', this.respondentId)
         params.append('questionnaireId', this.questionnaireId)
         params.append('answers', JSON.stringify(answers))
-        axios.post('http://127.0.0.1:8010/answers/submit', params).then((res) => {
-          const code = res.data.data.code
-          console.log('code',code)
-          if (code === '0'){
-            this.showAlert(0)
-          }else {
-            this.showAlert(1)
-          }
+        axios.post('/answers/submit', params).then((res) => {
         })
-      }else {
-        this.showAlert(2)
       }
+     //
+     // 完成作答
+      const params = new URLSearchParams()
+      params.append('respondentId', this.respondentId)
+      params.append('complete', 'True')
+      axios.post('/respondents/complete', params).then((res) => {
+        const code = res.data.data.code
+        console.log('code',code)
+        if (code === '0'){
+          this.showAlert(0)
+        }else {
+          this.showAlert(1)
+        }
+      })
     },
+    // 找出要提交的答案。（有所更改的答案）
     collectAnswers() {
       const answers = []
       for (let i = 0, l = this.answersChange.length; i < l; i++) {
@@ -152,6 +164,7 @@ export default {
       this.$store.commit('resetAnswersChange')
       return answers
     },
+    // 点击提交按钮后，给出反馈
     showAlert(key){
       this.key = key
       this.alertShow = true
@@ -181,7 +194,7 @@ export default {
 
   created() {
     this.getQuestionnaire()
-    this.submit()
+    this.submitAuto()
   }
 }
 </script>

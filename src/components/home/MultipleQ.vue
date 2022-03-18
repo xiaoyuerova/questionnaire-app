@@ -12,14 +12,16 @@
           cols="11"
           class="pl-5 pr-10"
       >
-        <v-row style="height: 20px"></v-row>
-        <v-row>
+        <v-row style="height: 20px" class="ma-0"></v-row>
+        <v-row class="ma-0">
           <v-col
               cols="12"
+              class="pa-0"
+              style="position: relative"
           >
             <template v-for="(option,index) in question.options">
-              <div>
-                <div style="width: 82%;position: absolute;" ref="checkbox">
+              <div class="pr-4" style="position: absolute">
+                <div ref="checkbox">
                   <v-checkbox
                       v-model="answersLocal[index]"
                       :label="option"
@@ -29,24 +31,24 @@
                       class="py-1"
                   ></v-checkbox>
                 </div>
-                <v-progress-linear
-                    v-if="question.reference"
-                    v-model="percentage[index]"
-                    background-color=rgba(0,0,255,0.05)
-                    color="rgba(0,0,255,0.2)"
-                    :height="progressHeight[index]"
-                    class="ml-7 mb-1"
-                    rounded
-                >
-                  <div class="d-flex justify-end pr-2" style="width: 100%;">
-                    <span style="font-size: 16px;line-height: 100%">{{ percentage[index] }}%</span>
-                  </div>
-                </v-progress-linear>
               </div>
+              <v-progress-linear
+                  v-if="question.reference"
+                  v-model="percentage[index]"
+                  background-color=rgba(0,0,255,0.05)
+                  color="rgba(0,0,255,0.2)"
+                  :height="progressHeight[index]"
+                  class="ml-7 mb-1"
+                  rounded
+              >
+                <div class="d-flex justify-end pr-2" style="width: 100%;">
+                  <span style="font-size: 16px;line-height: 100%">{{ percentage[index] }}%</span>
+                </div>
+              </v-progress-linear>
             </template>
           </v-col>
         </v-row>
-        <v-row style="height: 20px"></v-row>
+        <v-row style="height: 20px" class="ma-0"></v-row>
       </v-col>
     </v-row>
   </v-card>

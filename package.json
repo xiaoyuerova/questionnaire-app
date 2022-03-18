@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "push": "npm run build && scp -r dist root@1.116.207.102:/var/www/questionnaireapp"
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.1",

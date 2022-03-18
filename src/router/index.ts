@@ -32,6 +32,11 @@ const routes: Array<RouteConfig> = [
         path: '/register',
         name: 'QuestionersRegister',
         component: QRegister
+    },
+    {
+        path: '/questioners/index',
+        name: 'Questioner',
+        component: () => import('@/views/questioners/Questioner.vue')
     }
 ]
 

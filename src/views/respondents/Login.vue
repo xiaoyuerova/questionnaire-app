@@ -5,7 +5,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import axios from "axios";
-import json_to_obj from "@/assets/common/common";
+import apiUrl from "@/utils/api";
+// axios默认配置
+axios.defaults.timeout = 10000;   // 超时时间
+axios.defaults.baseURL = apiUrl;  // 默认地址
 
 export default Vue.extend({
   name: "Login",
@@ -19,7 +22,7 @@ export default Vue.extend({
     register(){
       const params = new URLSearchParams()
       params.append('questionnaireId',this.questionnaireId)
-      axios.post('http://127.0.0.1:8010/respondents/register',params).then((res)=>{
+      axios.post('/respondents/register',params).then((res)=>{
         const data = res.data.data
         console.log(data)
         if (data.code === '0') {
