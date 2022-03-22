@@ -76,8 +76,8 @@ export default {
   data: () => ({
     questionnaireId: '',
     respondentId: '',
-    alertText: ['提交成功！', '提交失败！请稍后再次尝试'],
-    alertType: ['success', 'error'],
+    alertText: ['提交成功！', '有必答题未作答','提交失败！请稍后再次尝试'],
+    alertType: ['success','warning','error'],
     key:0,
     alertShow: false
   }),
@@ -107,7 +107,7 @@ export default {
         }
       })
     },
-    // 每隔十秒自动提交一次有所更改的答案
+    // 每隔5秒自动提交一次有所更改的答案
     submitAuto() {
       setInterval(() => {
         const answers = this.collectAnswers()
@@ -119,7 +119,7 @@ export default {
           axios.post('/answers/submit', params).then((res) => {
           })
         }
-      }, 10000)
+      }, 5000)
     },
     // 点击提交按钮，表示完成问卷：提交更改过的答案；检查是否每一题都有回答，没有问题就认定为结束作答
     submitQuestionnaire() {
@@ -130,20 +130,27 @@ export default {
         params.append('questionnaireId', this.questionnaireId)
         params.append('answers', JSON.stringify(answers))
         axios.post('/answers/submit', params).then((res) => {
+          this.complete()
         })
+      }else {
+        this.complete()
       }
-     //
-     // 完成作答
+    },
+    // 完成作答
+    complete() {
+      // 完成作答
       const params = new URLSearchParams()
       params.append('respondentId', this.respondentId)
       params.append('complete', 'True')
       axios.post('/respondents/complete', params).then((res) => {
         const code = res.data.data.code
-        console.log('code',code)
-        if (code === '0'){
+        console.log('code', code)
+        if (code === '0') {
           this.showAlert(0)
-        }else {
+        } else if (code === '4004') {
           this.showAlert(1)
+        } else {
+          this.showAlert(2)
         }
       })
     },
@@ -194,7 +201,7 @@ export default {
 
   created() {
     this.getQuestionnaire()
-    this.submitAuto()
+    // this.submitAuto()
   }
 }
 </script>

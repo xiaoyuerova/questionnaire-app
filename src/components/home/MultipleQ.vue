@@ -2,12 +2,19 @@
   <v-card
       elevation="2"
   >
-    <v-subheader>
-      {{ index + 1 }}.{{ question.question }}
-      <span style="color: #5472ff">{{ questionType[typeKey] }}</span>
-    </v-subheader>
     <v-row
-        justify="center">
+        justify="center"
+        no-gutters
+    >
+      <v-col
+          cols="11"
+          class="mt-6"
+      >
+        <p style="font-size: 14px;color: #525252;margin-bottom: 0">
+          {{ index + 1 }}.{{ question.question }}
+          <span style="color: #5472ff">{{ questionType[typeKey] }}</span>
+        </p>
+      </v-col>
       <v-col
           cols="11"
           class="pl-5 pr-10"
@@ -34,7 +41,7 @@
               </div>
               <v-progress-linear
                   v-if="question.reference"
-                  v-model="percentage[index]"
+                  :value="percentage[index]"
                   background-color=rgba(0,0,255,0.05)
                   color="rgba(0,0,255,0.2)"
                   :height="progressHeight[index]"

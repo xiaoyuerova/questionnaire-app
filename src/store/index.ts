@@ -40,8 +40,8 @@ export default new Vuex.Store({
         },
         setAnswers(state, as) {
             for (let i = 0; i < as.length; i++) {
+                const answerObj = as[i]
                 for (let j = 0; j < state.questionIds.length; j++) {
-                    const answerObj = as[i]
                     const questionObj = state.questions[j]
                     // @ts-ignore
                     if (answerObj.questionId === questionObj.id) {
