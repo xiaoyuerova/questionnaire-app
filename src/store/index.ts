@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import {get,set,remove} from '@/utils/cookie'
 
 Vue.use(Vuex)
 
@@ -11,9 +12,13 @@ export default new Vuex.Store({
         answers: Array<Array<boolean>>(),
         answersChange: Array<boolean>(),
         referenceAnswer: Array<Array<number>>(),
+
+        token: '',
+        respondentId: -99
     },
     mutations: {
         setQuestionnaire(state, questionnaire){
+            console.log('setQuestionnaire questionnaire', questionnaire)
             state.questionnaire = questionnaire
         },
         setQuestions(state, qs) {
@@ -59,8 +64,25 @@ export default new Vuex.Store({
             for (let i = 0; i < state.answersChange.length; i++) {
                 state.answersChange[i] = false
             }
+        },
+        setToken(state, token){
+            state.token = token
+            set('respondentToken', token)
+        },
+        setRespondentId(state, respondentId){
+            state.respondentId = respondentId
+        },
+        reset_session(state){
+            remove('respondentToken')
+            state.respondentId = -99
+            // remove('isExamVersion')
         }
     },
-    actions: {},
+    actions: {
+        setUserData({commit},data){
+            commit('setToken', data.token)
+            commit('setRespondentId', data.respondentId)
+        },
+    },
     modules: {}
 })

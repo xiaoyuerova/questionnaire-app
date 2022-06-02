@@ -14,7 +14,7 @@ const routes: Array<RouteConfig> = [
         component: RLogin
     },
     {
-        path: '/respondents/:qid/:rid',     /*qid: questionnaireId; rid: respondentId */
+        path: '/respondents',     /*qid: questionnaireId; rid: respondentId */
         name: 'RespondentsHome',
         component: RHome
     },
