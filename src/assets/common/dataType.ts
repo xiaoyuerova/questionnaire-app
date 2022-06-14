@@ -43,10 +43,10 @@ export interface Response {
 // }
 
 export class Answer {
-    id?: Number=0
-    respondentId?: Number=0
-    questionnaireId?: Number=0
-    questionId?: Number=0
+    id?: Number = 0
+    respondentId?: Number = 0
+    questionnaireId?: Number = 0
+    questionId?: Number = 0
     reference: boolean = false
     referenceAnswer = []
     answer = []
@@ -55,33 +55,48 @@ export class Answer {
 }
 
 export class Question {
-    id?: Number=0
-    questionnaireId=0
-    questionNumber=0
-    type=0
-    model=0
-    question: String=''
-    options: Array<boolean>=[]
-    optionsCount: Number=0
-    reference: boolean=false
-    referenceAnswer: Array<Number>=[]
-    referenceText: String=''
+    id?: Number = 0
+    questionnaireId = 0
+    questionNumber = 0
+    type = 0
+    model = 0
+    question: String = ''
+    options: Array<boolean> = []
+    optionsCount: Number = 0
+    reference: boolean = false
+    referenceAnswer: Array<Number> = []
+    referenceText: String = ''
 }
 
 export class Questionnaire {
-    id: Number=0
-    questionerId: Number=0
-    name: String='暂无问卷名'
-    date: String=''
-    time: String=''
-    published: boolean=true
-    respondentsCount: Number=0
-    model: Number=0
+    id: Number = 0
+    questionerId: Number = 0
+    name: String = '暂无问卷名'
+    date: String = ''
+    time: String = ''
+    published: boolean = true
+    respondentsCount: Number = 0
+    model: Number = 0
 }
 
 export class QuestionBean {
-    question=new Question()
-    answer=new Answer()
-    answerChange=false
-    active=false
+    question = new Question()
+    answer = new Answer()
+    answerChange = false
+    active = false
+}
+
+export class Recording {
+    events:Array<any> = []
+    startTime = -1
+    htmlCopy = ""
+    height:number | undefined=1
+    width:number | undefined=1
+}
+
+class Event {
+    type = ''
+    x=0
+    y=0
+    time=Date.now()
 }

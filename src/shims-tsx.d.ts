@@ -11,3 +11,9 @@ declare global {
     }
   }
 }
+declare global {
+  namespace window {
+    // tslint:disable no-empty-interface
+    interface $ extends jQuery {}
+  }
+}

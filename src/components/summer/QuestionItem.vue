@@ -21,6 +21,8 @@
 import Radio from "./Radio";
 import {QuestionBean, Questionnaire} from "../../assets/common/dataType";
 import MultipleChoice from "./multipleChoice";
+import {RecordTool} from "../../assets/keystroke/RecordTool";
+
 export default {
   name: "QuestionItem",
   components: {MultipleChoice, Radio},
@@ -42,6 +44,16 @@ export default {
       }
     }
   },
+  mounted() {
+    const recordTool = new RecordTool()
+    recordTool.startRecording()
+    setTimeout(()=>{
+      recordTool.stopRecording()
+      console.log(recordTool.recording)
+      const text = JSON.stringify(recordTool.recording)
+      console.log(text.length, text)
+    }, 15000)
+  }
 }
 </script>
 

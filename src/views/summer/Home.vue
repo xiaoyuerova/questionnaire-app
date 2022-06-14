@@ -30,6 +30,7 @@ import Vue from "vue";
 import Radio from "@/components/summer/Radio.vue";
 import {matchQA, toQuestionnaire,questionSort} from "@/assets/common/common";
 import QuestionItem from "../../components/summer/QuestionItem";
+import {} from "jquery";
 
 
 export default Vue.extend({
