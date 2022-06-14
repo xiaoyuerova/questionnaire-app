@@ -37,7 +37,17 @@ const routes: Array<RouteConfig> = [
         path: '/questioners/index',
         name: 'Questioner',
         component: () => import('@/views/questioners/Questioner.vue')
-    }
+    },
+    {
+        path: '/summer/login',
+        name: 'summerLogin',
+        component: () => import('../views/summer/Login.vue')
+    },
+    {
+        path: '/summer/:qid',
+        name: 'summerHome',
+        component: () => import('../views/summer/Home.vue')
+    },
 ]
 
 const router = new VueRouter({

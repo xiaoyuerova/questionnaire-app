@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {get,set,remove} from '@/utils/cookie'
+import {get, set, remove} from '@/utils/cookie'
+import {Questionnaire} from "@/assets/common/dataType";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        questionnaire: '',
+        questionnaire: new Questionnaire(),
         questions: Array<object>(),
         questionIds: Array<number>(),
         answers: Array<Array<boolean>>(),
@@ -14,10 +15,18 @@ export default new Vuex.Store({
         referenceAnswer: Array<Array<number>>(),
 
         token: '',
-        respondentId: -99
+        respondentId: -99,
+
+        // summer
+        questionnaireId: Number,
+        questionCount: 0,
+        pointer: 0
     },
     mutations: {
-        setQuestionnaire(state, questionnaire){
+        setQuestionnaireId(state, id) {
+            state.questionnaireId = id
+        },
+        setQuestionnaire(state, questionnaire) {
             console.log('setQuestionnaire questionnaire', questionnaire)
             state.questionnaire = questionnaire
         },
@@ -65,21 +74,31 @@ export default new Vuex.Store({
                 state.answersChange[i] = false
             }
         },
-        setToken(state, token){
+        setToken(state, token) {
             state.token = token
             set('respondentToken', token)
         },
-        setRespondentId(state, respondentId){
+        setRespondentId(state, respondentId) {
             state.respondentId = respondentId
         },
-        reset_session(state){
+        reset_session(state) {
             remove('respondentToken')
             state.respondentId = -99
             // remove('isExamVersion')
+        },
+        // summer
+        setQuestionCount(state, qCount) {
+            state.questionCount = qCount
+        },
+        pointerAdd(state) {
+            state.pointer += 1
+        },
+        pointerMinus(state) {
+            state.pointer -= 1
         }
     },
     actions: {
-        setUserData({commit},data){
+        setUserData({commit}, data) {
             commit('setToken', data.token)
             commit('setRespondentId', data.respondentId)
         },
