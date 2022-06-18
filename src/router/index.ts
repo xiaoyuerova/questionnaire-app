@@ -8,6 +8,16 @@ import RLogin from '@/views/respondents/Login.vue'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
+    // {
+    //     path: '/',
+    //     name: 'QuestionersLogin',
+    //     component: QLogin
+    // },
+    {
+        path: '/',
+        name: 'QuestionersLogin',
+        component: QLogin
+    },
     {
         path: '/respondents/login/:qid',
         name: 'RespondentsLogin',
@@ -22,11 +32,6 @@ const routes: Array<RouteConfig> = [
         path: '/about',
         name: 'About',
         component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    },
-    {
-        path: '/',
-        name: 'QuestionersLogin',
-        component: QLogin
     },
     {
         path: '/register',
