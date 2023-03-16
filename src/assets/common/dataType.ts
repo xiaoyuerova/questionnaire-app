@@ -100,3 +100,33 @@ class Event {
     y=0
     time=Date.now()
 }
+
+export class Paper {
+    Uid: String = ''
+    Title: String = ''
+    Author: String = ''
+    Abstract: String = ''
+    Title_CN: String = ''
+    Abstract_CN: String = ''
+    Link: String = ''
+    Meeting: String = ''
+    Complete: boolean = false
+    Locked: boolean = false
+    Select1: boolean = false
+    Select2: boolean = false
+}
+
+// export interface Paper {
+//     uid: String;
+//     Title: String;
+//     Author: String;
+//     Abstract: String;
+//     Title_CN: String;
+//     Abstract_CN: String;
+//     Link: String;
+//     Meeting: String;
+//     Complete: boolean;
+//     Locked: boolean;
+//     Select1: boolean;
+//     Select2: boolean;
+// }

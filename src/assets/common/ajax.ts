@@ -22,4 +22,18 @@ export function commonAjax(url:string, data:Params, method = 'post') {
             params: data
         })
     }
+    else if (method === 'put') {
+        return request({
+            url: url,
+            method: 'put',
+            data: data
+        })
+    }
+    // else if (method === 'delete') {
+    //     return request({
+    //         url: url,
+    //         method: 'delete',
+    //         params: data
+    //     })
+    // }
 }

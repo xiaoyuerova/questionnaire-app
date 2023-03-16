@@ -15,8 +15,8 @@ const routes: Array<RouteConfig> = [
     // },
     {
         path: '/',
-        name: 'QuestionersLogin',
-        component: QLogin
+        name: '',
+        component: () => import('../views/paper/paper.vue')
     },
     {
         path: '/respondents/login/:qid',
@@ -53,6 +53,16 @@ const routes: Array<RouteConfig> = [
         name: 'summerHome',
         component: () => import('../views/summer/Home.vue')
     },
+    {
+        path: '/paper',
+        name: 'paper',
+        component: () => import('../views/paper/paper.vue')
+    },
+    {
+        path: '/paper/admin',
+        name: 'paperAdmin',
+        component: () => import('../views/paper/admin.vue')
+    }
 ]
 
 const router = new VueRouter({

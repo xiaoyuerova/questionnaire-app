@@ -48,14 +48,15 @@ service.interceptors.response.use(
      * You can also judge the status by HTTP Status Code
      */
     (response):any => {
-        console.log(response)
-        const res:Response = response.data.data
-        // if the custom code is not 200, it is judged as an error.
-        if (response.status !== 200) {
-            return Promise.reject(new Error(response.data || 'Error'))
-        } else {
-            return res
-        }
+        // console.log(response)
+        // const res:Response = response.data.data
+        // // if the custom code is not 200, it is judged as an error.
+        // if (response.status !== 200) {
+        //     return Promise.reject(new Error(response.data || 'Error'))
+        // } else {
+        //     return res
+        // }
+        return response
     },
     error => {
         console.log('err' + error) // for debug
