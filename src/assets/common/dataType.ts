@@ -130,3 +130,15 @@ export class Paper {
 //     Select1: boolean;
 //     Select2: boolean;
 // }
+
+
+// special app
+export class SpecialUser {
+    id: Number = 0
+    number: Number = 0
+    ip: String = ''
+    agent: String = ''
+    date: String = ''
+    time: String = ''
+    answers: Array<Number> = []
+}

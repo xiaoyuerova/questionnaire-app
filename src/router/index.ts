@@ -5,6 +5,8 @@ import QLogin from '../views/questioners/Login.vue'
 import QRegister from '../views/questioners/Register.vue'
 import RLogin from '@/views/respondents/Login.vue'
 
+import SpecialRouter from './modules/special'
+
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -15,8 +17,7 @@ const routes: Array<RouteConfig> = [
     // },
     {
         path: '/',
-        name: '',
-        component: () => import('../views/paper/paper.vue')
+        redirect: { name: 'specialHome'}
     },
     {
         path: '/respondents/login/:qid',
@@ -62,6 +63,11 @@ const routes: Array<RouteConfig> = [
         path: '/paper/admin',
         name: 'paperAdmin',
         component: () => import('../views/paper/admin.vue')
+    },
+    {
+        path: '/special',
+        component: () => import('../views/special/Layout.vue'),
+        children: SpecialRouter
     }
 ]
 

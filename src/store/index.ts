@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {get, set, remove} from '@/utils/cookie'
-import {Questionnaire} from "@/assets/common/dataType";
+import {Questionnaire, SpecialUser} from "@/assets/common/dataType";
 
 Vue.use(Vuex)
 
@@ -20,7 +20,10 @@ export default new Vuex.Store({
         // summer
         questionnaireId: Number,
         questionCount: 0,
-        pointer: 0
+        pointer: 0,
+
+        // special
+        user: new SpecialUser()
     },
     mutations: {
         setQuestionnaireId(state, id) {
@@ -95,6 +98,11 @@ export default new Vuex.Store({
         },
         pointerMinus(state) {
             state.pointer -= 1
+        },
+
+        // special
+        setSpecialUser(state, user) {
+            state.user = user
         }
     },
     actions: {
