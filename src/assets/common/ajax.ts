@@ -3,7 +3,8 @@ import request from '@/assets/common/request'
 interface Params {
     [propName: string]: any;
 }
-export function commonAjax(url:string, data:Params, method = 'post') {
+
+export function commonAjax(url: string, data: Params, method = 'post') {
     if (method === 'post') {
         let params = new URLSearchParams()
         for (let k in data) {
@@ -21,19 +22,18 @@ export function commonAjax(url:string, data:Params, method = 'post') {
             method: 'get',
             params: data
         })
-    }
-    else if (method === 'put') {
+    } else if (method === 'put') {
         return request({
             url: url,
             method: 'put',
             data: data
         })
+    } else {
+        // @ts-ignore
+        return request({
+            url: url,
+            method: method,
+            params: data
+        })
     }
-    // else if (method === 'delete') {
-    //     return request({
-    //         url: url,
-    //         method: 'delete',
-    //         params: data
-    //     })
-    // }
 }

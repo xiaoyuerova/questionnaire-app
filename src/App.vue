@@ -17,6 +17,9 @@ export default Vue.extend({
     //
   }),
 
+  methods: {
+  },
+
   store:store
 });
 </script>

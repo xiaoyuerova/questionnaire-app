@@ -9,6 +9,17 @@
     </h2>
   </v-col>
   <v-col
+      cols="11"
+      class="d-flex"
+  >
+    <h4
+        style="color: #666"
+      class="mt-4"
+    >
+      {{ questionnaire.des }}
+    </h4>
+  </v-col>
+  <v-col
       v-for="(item, index) in questionnaire.items"
       :key="index"
       cols="11"
@@ -22,6 +33,7 @@
             class="ml-8"
         >
           <v-radio
+              color="success"
               v-for="n in 7"
               :key="n"
               :label="questionnaire.options[n-1]"
@@ -54,7 +66,7 @@
       class="d-flex justify-center"
   >
     <v-btn
-        color="primary"
+        color="success"
         @click="submit"
         class="mb-10"
     >提交问卷
@@ -68,18 +80,12 @@ import {commonAjax} from "../../assets/common/ajax";
 
 export default {
   name: "home",
+  // inject: ['reload'],
   data(){
     return {
       questionnaire: {
-        name: '中文版10项目大五人格量表',
-        des: 'Here are a number of personality traits that may or may not apply to you. Please write a number next to each statement to indicate the extent to which you agree or disagree with that statement. You should rate the extent to which the pair of traits applies to you, even if one characteristic applies more strongly than the other.\n' +
-            '1 = Disagree strongly\n' +
-            '2 = Disagree moderately\n' +
-            '3 = Disagree a little\n' +
-            '4 = Neither agree nor disagree\n' +
-            '5 = Agree a little\n' +
-            '6 = Agree moderately\n' +
-            '7 = Agree strongly\n',
+        name: '人格测试问卷',
+        des: '以下有关性格特征的描述有可能符合您的情况，也有可能不符合您的情况。 请对每个描述选择您同意或不同意的程度。 请综合评价每个描述中提到的两个性格特征跟您的匹配程度，即使其中一个特征比另一个特征的匹配程度更高。',
         items: [
             '外向的, 热情的',
             '挑剔的, 爱争论的',
@@ -93,43 +99,83 @@ export default {
             '循规蹈矩的, 缺乏创造性的'
         ],
         options: [
-            '强烈反对',
-            '适度不同意',
-            '有点不同意',
-            '既不同意也不反对',
-            '有点同意',
+            '非常不同意',
+            '不同意',
+            '比较不同意',
+            '中立',
             '比较同意',
-            '强烈同意',
+            '同意',
+            '非常同意',
         ],
         answers: new Array(10)
       },
-      alertText: ['提交成功！', '有必答题未作答', '提交失败！请稍后再次尝试'],
+      alertText: ['提交成功！', '有必答题未作答', '未知错误,请刷新重试'],
       alertType: ['success', 'warning', 'error'],
       key: 0,
-      alertShow: false
+      alertShow: false,
+      startTime: new Date()
     }
   },
   methods: {
     Authentication(){
-      commonAjax('/special/info', {}, 'get').then((res) => {
-        if(res.status === 204){
-          this.$router.push({name: 'specialThankyou'})
+      commonAjax('/special/authentic', {'WjId': 1}, 'post').then((res) => {
+        if(res.status === 200){
+          // console.log(res, res.data.id)
+          const data = res.data
+          data.Answer = JSON.parse(data.Answer)
+          this.$store.commit('setSpecialUser', data)
+          this.$router.push({name: 'specialResult'})
+        } else if(res.status === 204) {
+          // 新用户，继续
+          // console.log(res)
         }
       })
     },
     submit(){
-      commonAjax('/special/answer', {answers: this.questionnaire.answers}, 'post').then((res) => {
-        if(res.status === 200){
-          this.
+      // 验证是否都作答
+      for (let i = 0; i<this.questionnaire.answers.length;i++){
+        if (this.questionnaire.answers[i] === undefined){
+          this.showAlert(1)
+          return
+        }
+      }
+      const data = {
+        'WjId': 1,
+        'UseTime': this.useTime,
+        'Answer': JSON.stringify(this.questionnaire.answers),
+      }
+      commonAjax('/special/submit', data, 'post').then((res) => {
+        if(res.status === 201){
+          const data = res.data
+          data.Answer = JSON.parse(data.Answer)
+          this.$store.commit('setSpecialUser', data)
           this.$router.push({name: 'specialResult'})
+        }else {
+          // 未知错误
+          this.alertShow(2)
         }
       })
-      this.$router.push({name: 'specialResult'})
+    },
+    // 点击提交按钮后，给出反馈
+    showAlert(key) {
+      this.key = key
+      this.alertShow = true
+      setTimeout(() => {
+        this.alertShow = false
+      }, 5000)
     }
   },
   mounted() {
     this.Authentication()
   },
+  computed:{
+    useTime(){
+      const endTime = new Date()
+      const useTime = endTime - this.startTime
+      // console.log('useTime', useTime)
+      return useTime
+    }
+  }
 }
 </script>
 

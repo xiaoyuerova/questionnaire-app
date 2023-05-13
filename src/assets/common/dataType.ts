@@ -134,11 +134,13 @@ export class Paper {
 
 // special app
 export class SpecialUser {
-    id: Number = 0
-    number: Number = 0
-    ip: String = ''
-    agent: String = ''
-    date: String = ''
-    time: String = ''
-    answers: Array<Number> = []
+    id: Number | undefined
+    WjId: Number = 0
+    Number: Number = 0
+    Data: String = ''
+    Time: String = ''
+    SubmitIp: String = ''
+    UseTime: Number = 0
+    Agent: String = ''
+    Answer: Array<Number> = []
 }

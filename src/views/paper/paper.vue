@@ -148,10 +148,12 @@
           >
             <v-btn
                 large
-                class="mr-10"
                 @click="exchange">
               切换视图
             </v-btn>
+            <div
+            style="width: 1px; height: 1px"
+            class="mr-10 hidden-lg-and-down"></div>
             <v-btn
                 text
                 color="deep-purple accent-4"
@@ -161,6 +163,7 @@
             </v-btn>
             <v-btn
                 v-for="index in paper_list.length"
+                class="hidden-md-and-down"
                 :key="index"
                 @click="select(index)"
                 :color="(index === pointer+1?'primary':'')"
@@ -174,9 +177,11 @@
             >
               下一篇
             </v-btn>
+            <div
+                style="width: 1px; height: 1px"
+                class="mr-10 hidden-md-and-down"></div>
             <v-btn
                 large
-                class="ml-10"
                 @click="submit_confirmation">
               提交
             </v-btn>

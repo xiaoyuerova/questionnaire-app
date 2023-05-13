@@ -8,11 +8,13 @@
     "push": "npm run build && scp -r dist root@121.40.58.21:/var/www/questionnaireapp"
   },
   "dependencies": {
+    "@mdi/js": "^7.2.96",
     "@types/jquery": "^3.5.14",
     "@types/js-cookie": "^3.0.1",
     "axios": "^0.25.0",
     "caniuse-lite": "^1.0.30001482",
     "core-js": "^3.6.5",
+    "device-uuid": "^1.0.4",
     "echarts": "^5.4.2",
     "jquery": "^1.12.4",
     "js-cookie": "^3.0.1",
